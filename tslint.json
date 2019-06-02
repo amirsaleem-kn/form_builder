@@ -1,0 +1,19 @@
+{
+    "defaultSeverity": "error",
+    "interface-name" : [true, "never-prefix"],
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "interface-name": false,
+        "trailing-comma": [
+            false
+        ],
+        "max-line-length": [
+            true,
+            180
+        ]
+    },
+    "rulesDirectory": []
+}
