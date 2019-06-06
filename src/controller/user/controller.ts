@@ -4,57 +4,46 @@ import Database from "../../lib/database/database";
 import httpResponse from "../../lib/http/response";
 import Log from "../../lib/logger";
 import * as types from "../../types";
-import crypto from "../../util/crypto";
+import * as util from "../../util/helper";
 
 class UserController {
 
     constructor() {
-        this.findById = this.findById.bind(this);
-        this.register = this.register.bind(this);
+        this.login = this.login.bind(this);
     }
 
-    public async findById(req: Request, res: Response, next: NextFunction) {
-        const db: types.Database = new Database();
-        try {
-            const conn: types.Database = await db.getConn();
-            const user = new User(conn);
-            const userId: number = req.params.userId;
-            const result: any = await user.find({ userId });
-            httpResponse.success(res, result);
-        } catch (e) {
-            next(e);
-        } finally {
-            db.close();
-        }
-    }
-
-    public async listAll(req: Request, res: Response, next: NextFunction) {
-        const db: types.Database = new Database();
-        try {
-            const conn: types.Database = await db.getConn();
-            const user = new User(conn);
-            const users: Promise<any> = await user.list();
-            httpResponse.success(res, users);
-        } catch (e) {
-            next(e);
-        } finally {
-            db.close();
-        }
-    }
-
-    public async register(req: Request, res: Response, next: NextFunction) {
+    public async list(req: Request, res: Response, next: NextFunction) {
         const db: types.Database = new Database();
         try {
             const conn: types.Database = await db.getConn();
             const user: User = new User(conn);
-            const { username } = req.body;
-            const existingUser: any = await user.find({ username });
-            if (existingUser.length > 0) {
-                httpResponse.badRequest(res, { message: "username already exists" });
+            httpResponse.success(res, []);
+        } catch (e) {
+            next(e);
+        } finally {
+            db.close();
+        }
+    }
+
+    public async login(req: Request, res: Response, next: NextFunction) {
+        const db: types.Database = new Database();
+        try {
+            const conn: types.Database = await db.getConn();
+            const user: User = new User(conn);
+            const clientSecret = req.get("clientSecret");
+            let credentials: any = req.get("Authorization");
+            if (!clientSecret || !credentials) {
+                httpResponse.forbidden(res); // 403
                 return;
             }
-            const result: any = await user.register(req.body);
-            httpResponse.success(res, result);
+            credentials = util.base64_decode(credentials.slice(6, credentials.length));
+            credentials = credentials.split(":");
+            const token = await user.login(credentials[0], credentials[1], clientSecret);
+            if (token) {
+                httpResponse.success(res, { token }); // successfully logged in
+                return;
+            }
+            httpResponse.forbidden(res); // 403
         } catch (e) {
             next(e);
         } finally {
@@ -62,14 +51,17 @@ class UserController {
         }
     }
 
-    public async delete(req: Request, res: Response, next: NextFunction) {
+    public async signup(req: Request, res: Response, next: NextFunction) {
         const db: types.Database = new Database();
         try {
             const conn: types.Database = await db.getConn();
             const user: User = new User(conn);
-            const { userId } = req.params;
-            const result = await user.delete(userId);
-            httpResponse.success(res, result);
+            const newUser: any = await user.singup(req.body);
+            if (newUser) {
+                httpResponse.success(res, newUser);
+                return;
+            }
+            httpResponse.badRequest(res, { msg: "username already exists" });
         } catch (e) {
             next(e);
         } finally {

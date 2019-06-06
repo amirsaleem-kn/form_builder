@@ -69,3 +69,11 @@ export function prepareStmtFromObject(params: any) {
     });
     return { constraints, data };
 }
+
+export function base64_encode(str: string) {
+    return Buffer.from(str).toString("base64");
+}
+
+export function base64_decode(str: string) {
+    return Buffer.from(str, "base64").toString("ascii");
+}

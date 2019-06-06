@@ -1,6 +1,8 @@
 import express from "express";
 import UserController from "../../../../controller/user/controller";
+import * as userModel from "../../../../model/user";
 import Routes from "../../../../routes";
+import Validator from "../../../../validator";
 
 class UserRoutes extends Routes {
     constructor() {
@@ -8,7 +10,8 @@ class UserRoutes extends Routes {
     }
     public subscribe(path: string, router: express.Router) {
         const userController = new UserController();
-        this.router.get("/", userController.findById);
+        const validator = new Validator();
+        this.router.post("/login", validator.validate(userModel.login), userController.login);
         router.use(path, this.router);
     }
 }

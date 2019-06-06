@@ -1,9 +1,11 @@
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import express from "express";
 import "reflect-metadata";
 import config from "./configuration";
-import Log from "./lib/logger";
+import log from "./lib/logger";
 import subscriber from "./routes/subscriber";
+import crypto from "./util/crypto";
 
 /**
  * class to contain Express Application Server
@@ -20,12 +22,13 @@ class App {
 
     public async start(): Promise<void> {
         this.app.listen(this.port, () => {
-            Log.print(this.startupMessage);
+            log.print(this.startupMessage);
         });
     }
 
     private init(): void {
         this.app = express();
+        this.app.use(cookieParser());
         this.app.use(bodyParser.json(config.bodyParser.json));
         this.app.use(bodyParser.urlencoded(config.bodyParser.urlencoded));
         subscriber.subscribe(this.app); // subscribe to application routes

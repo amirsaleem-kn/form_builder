@@ -1,18 +1,13 @@
-export const getUser = {
-    userId: { required: true },
+import types from "../../validator/types";
+
+export const login = {
 };
 
-export const getUsers = {
-    sort_by: {  }
-};
-
-export const registerUser = {
+export const signup = {
+    clientId: { required: true },
     firstName: { required: true },
     lastName: { required: true },
+    levelId: { required: true },
     password: { required: true },
     username: { required: true },
-};
-
-export const deleteUser = {
-    userId: { required: true }
 };

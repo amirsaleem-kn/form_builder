@@ -9,7 +9,7 @@ class HttpResponse implements types.HttpResponse {
         });
     }
     public created(res: Response, data: any): void {
-        res.status(204).json({
+        res.status(201).json({
             data,
             status: "success"
         });
@@ -32,7 +32,17 @@ class HttpResponse implements types.HttpResponse {
     }
     public serviceError(res: Response): void {
         res.status(503).json({
-            error: "some error occurred"
+            error: { message: "some error occurred" }
+        });
+    }
+    public unauthorised(res: Response): void {
+        res.status(401).json({
+            error: "expired token"
+        });
+    }
+    public forbidden(res: Response): void {
+        res.status(403).json({
+            error: "forbidden"
         });
     }
 }

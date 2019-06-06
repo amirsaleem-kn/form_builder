@@ -5,6 +5,7 @@ export interface Configuration {
     bodyParser: BodyParser;
     crypto: Crypto;
     database: MySQLDatabase;
+    jwt: JWT;
 }
 
 export interface MySQLDatabase {
@@ -29,7 +30,7 @@ interface Application {
 /* @internal */
 interface BodyParser {
     json: BodyParserJSON;
-    urlencoded: IBodyParserUrlEncoded;
+    urlencoded: BodyParserUrlEncoded;
 }
 
 /* @internal */
@@ -43,10 +44,17 @@ interface BodyParserJSON {
 }
 
 /* @internal */
-interface IBodyParserUrlEncoded {
+interface BodyParserUrlEncoded {
     extended: boolean;
     limit: string;
     parameterLimit: number;
+}
+
+/* @internal */
+interface JWT {
+    algorithm: string;
+    expiry: string;
+    issuer: string;
 }
 
 export interface Database {
@@ -67,10 +75,18 @@ export interface HttpResponse {
 }
 
 export interface User {
+    userId: number;
+    levelId: number;
     firstName: string;
     lastName: string;
     password: string;
     username: string;
     salt: string;
     hash: string;
+}
+
+export interface JWTSignOptions {
+    issuer: string;
+    subject: string;
+    audience: string;
 }

@@ -37,6 +37,11 @@ const configuration: types.Configuration = {
         timeout: 600000,
         user: "root",
     },
+    jwt: {
+        algorithm: "RS256",
+        expiry: "2m",
+        issuer: "my_organisation_name"
+    }
 };
 
 export default configuration;

@@ -2,6 +2,7 @@ import express from "express";
 import openSubscriber from "./open";
 import optionsSubscriber from "./options";
 import privateSubscriber from "./private";
+import protectedSubscriber from "./protected";
 import publicSubscriber from "./public";
 
 /**
@@ -16,6 +17,7 @@ class Subscriber {
         publicSubscriber.subscribe(app);
         privateSubscriber.subscribe(app);
         openSubscriber.subscribe(app);
+        protectedSubscriber.subscribe(app);
     }
 }
 
