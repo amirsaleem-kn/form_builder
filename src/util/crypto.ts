@@ -22,8 +22,8 @@ class Crypto {
         return crypto.createHash("md5").update(str + password).digest("hex");
     }
 
-    public randomBytes() {
-        return crypto.randomBytes(16).toString("hex");
+    public randomBytes(length: number = 32) {
+        return crypto.randomBytes(length / 2).toString("hex");
     }
 
 }

@@ -1,8 +1,7 @@
-import Log from "../lib/logger";
-import * as types from "../types";
-import * as helper from "../util/helper";
+import * as types from "../../types";
+import * as helper from "../../util/helper";
 
-class Entity {
+class BaseEntity {
 
     protected connection: types.Database = null;
     protected entityName: string = null;
@@ -12,7 +11,7 @@ class Entity {
         this.entityName = entity;
     }
 
-    public async find(params: any, projection?: any) {
+    public async find(params: any, projection?: any): Promise<any[]> {
         const { data, constraints } = helper.prepareStmtFromObject(params);
         let columns: string[] = ["*"];
         if (projection) {
@@ -29,4 +28,4 @@ class Entity {
 
 }
 
-export default Entity;
+export default BaseEntity;

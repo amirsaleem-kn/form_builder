@@ -1,9 +1,4 @@
 import express from "express";
-import openSubscriber from "./open";
-import optionsSubscriber from "./options";
-import privateSubscriber from "./private";
-import protectedSubscriber from "./protected";
-import publicSubscriber from "./public";
 
 /**
  * Subscriber class to subscribe for
@@ -11,14 +6,8 @@ import publicSubscriber from "./public";
  * private levels
  */
 
-class Subscriber {
-    public subscribe(app: express.Application) {
-        optionsSubscriber.subscribe(app);
-        publicSubscriber.subscribe(app);
-        privateSubscriber.subscribe(app);
-        openSubscriber.subscribe(app);
-        protectedSubscriber.subscribe(app);
-    }
+abstract class Subscriber {
+    public abstract subscribe(app: express.Application): void;
 }
 
-export default new Subscriber();
+export default Subscriber;

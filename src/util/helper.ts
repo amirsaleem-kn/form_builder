@@ -1,4 +1,4 @@
-import Log from "../lib/logger";
+import Log from "../lib/Logger";
 
 export function getQueryVariables(values: any) {
     const columns: string[] = [];

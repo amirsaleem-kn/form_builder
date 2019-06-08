@@ -2,7 +2,7 @@ import mysql, { MysqlError, Pool, PoolConnection, Query, queryCallback } from "m
 import config from "../../configuration";
 import * as types from "../../types";
 import * as util from "../../util/helper";
-import Log from "../logger";
+import Log from "../Logger";
 
 const pool: Pool = mysql.createPool(config.database);
 

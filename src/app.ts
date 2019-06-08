@@ -3,9 +3,8 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import "reflect-metadata";
 import config from "./configuration";
-import log from "./lib/logger";
-import subscriber from "./routes/subscriber";
-import crypto from "./util/crypto";
+import Log from "./lib/Logger";
+import subscriber from "./routes/subscriber/main";
 
 /**
  * class to contain Express Application Server
@@ -22,7 +21,7 @@ class App {
 
     public async start(): Promise<void> {
         this.app.listen(this.port, () => {
-            log.print(this.startupMessage);
+            Log.print(this.startupMessage);
         });
     }
 

@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import config from "../../../configuration";
 import { Database } from "../../../lib/database";
-import httpResponse from "../../../lib/http/response";
+import Http from "../../../lib/http/http";
 import jwt from "../../../lib/jwt";
-import log from "../../../lib/logger";
+import Log from "../../../lib/Logger";
 import * as types from "../../../types";
 
 /**
@@ -16,7 +16,7 @@ import * as types from "../../../types";
 
 class PrivateAuthentication {
     public async authenticate(req: Request, res: Response, next: NextFunction) {
-        log.print("--- PRIVATE AUTHENTICATION ---");
+        Log.print("--- PRIVATE AUTHENTICATION ---");
         // as we do not want to authenticate OPTIONS request
         if (req.method === "OPTIONS") {
             return next();
@@ -25,7 +25,7 @@ class PrivateAuthentication {
         const username: string = req.get("username");
         const clientSecret: string = req.get("clientSecret");
         if (!tokenId) {
-            httpResponse.forbidden(res);
+            Http.Response.notFound(res);
             return;
         }
         const db: types.Database = new Database();
@@ -34,7 +34,7 @@ class PrivateAuthentication {
             tokenId = tokenId.slice(7, tokenId.length); // strip the token string to remove Bearer from it
             const jwts: any = await conn.query("SELECT token, userId FROM userToken WHERE tokenId = ? and valid = ?", [tokenId, 1]);
             if (jwts.length === 0) {
-                httpResponse.unauthorised(res);
+                Http.Response.unauthorised(res);
                 return;
             }
             const clientJWT = jwts[0].token;
@@ -46,12 +46,12 @@ class PrivateAuthentication {
                 const clientResult: any = await conn.query(clientQuery, [clientSecret, userId]);
                 // if user is not admin, or clientSecret is incorrect send 403
                 if (+payload.payload.levelId !== 1 || clientResult.length === 0) {
-                    httpResponse.forbidden(res);
+                    Http.Response.forbidden(res);
                     return;
                 }
                 return next(); // authentication is successful
             }
-            httpResponse.unauthorised(res);
+            Http.Response.unauthorised(res);
         } catch (e) {
             next(e);
         } finally {

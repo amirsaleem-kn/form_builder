@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import express from "express";
-import httpResponse from "../lib/http/response";
+import Http from "../lib/http/http";
 import Router from "../routes";
 
 class ResourceNotFoundHandler extends Router {
@@ -12,7 +12,7 @@ class ResourceNotFoundHandler extends Router {
     }
     private notFoundHandler(req: Request, res: Response, next: NextFunction) {
         res.status(404);
-        httpResponse.notFound(res);
+        Http.Response.notFound(res);
     }
 }
 

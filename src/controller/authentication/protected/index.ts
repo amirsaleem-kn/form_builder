@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import config from "../../../configuration";
 import { Database } from "../../../lib/database";
-import httpResponse from "../../../lib/http/response";
-import jwt from "../../../lib/jwt";
-import log from "../../../lib/logger";
+import Http from "../../../lib/http/http";
+import Log from "../../../lib/Logger";
 import * as types from "../../../types";
 
 /**
@@ -16,7 +14,7 @@ import * as types from "../../../types";
 
 class ProtectedAuthentication {
     public async authenticate(req: Request, res: Response, next: NextFunction) {
-        log.print("--- PROTECTED AUTHENTICATION ---");
+        Log.print("--- PROTECTED AUTHENTICATION ---");
         // as we do not want to authenticate OPTIONS request
         if (req.method === "OPTIONS") {
             return next();
@@ -25,7 +23,7 @@ class ProtectedAuthentication {
         const username: string = req.get("username");
         const clientID: string = req.get("clientID");
         if (!token) {
-            httpResponse.unauthorised(res);
+            Http.Response.unauthorised(res);
             return;
         }
         const db: types.Database = new Database();

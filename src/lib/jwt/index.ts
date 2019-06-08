@@ -2,7 +2,7 @@ import fs from "fs";
 import jwt from "jsonwebtoken";
 import path from "path";
 import config from "../../configuration";
-import log from "../../lib/logger";
+import Log from "../../lib/Logger";
 import * as types from "../../types";
 
 const PRIVATE_KEY = fs.readFileSync(path.resolve("./src/protected/private.key"), "utf-8");
@@ -32,7 +32,7 @@ class JWT {
         try {
             return jwt.verify(token, PUBLIC_KEY, verifyOptions);
         } catch (err) {
-            log.print(err);
+            Log.print(err);
             return false;
         }
     }

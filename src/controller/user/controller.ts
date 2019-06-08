@@ -1,31 +1,31 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../../entity/user/user";
 import Database from "../../lib/database/database";
-import httpResponse from "../../lib/http/response";
-import Log from "../../lib/logger";
+import Http from "../../lib/http/http";
 import * as types from "../../types";
 import * as util from "../../util/helper";
+import BaseController from "../base";
 
-class UserController {
+/**
+ * @author Amir Saleem
+ */
+
+class UserController extends BaseController implements types.ControllerConstraints<UserController> {
 
     constructor() {
+        super();
         this.login = this.login.bind(this);
+        this.signup = this.signup.bind(this);
     }
 
-    public async list(req: Request, res: Response, next: NextFunction) {
-        const db: types.Database = new Database();
-        try {
-            const conn: types.Database = await db.getConn();
-            const user: User = new User(conn);
-            httpResponse.success(res, []);
-        } catch (e) {
-            next(e);
-        } finally {
-            db.close();
-        }
-    }
+    /**
+     * @author Amir Saleem
+     * @param req
+     * @param res
+     * @param next
+     */
 
-    public async login(req: Request, res: Response, next: NextFunction) {
+    public async login(req: Request, res: Response, next: NextFunction): Promise<void> {
         const db: types.Database = new Database();
         try {
             const conn: types.Database = await db.getConn();
@@ -33,17 +33,17 @@ class UserController {
             const clientSecret = req.get("clientSecret");
             let credentials: any = req.get("Authorization");
             if (!clientSecret || !credentials) {
-                httpResponse.forbidden(res); // 403
+                Http.Response.forbidden(res); // 403
                 return;
             }
             credentials = util.base64_decode(credentials.slice(6, credentials.length));
             credentials = credentials.split(":");
             const token = await user.login(credentials[0], credentials[1], clientSecret);
             if (token) {
-                httpResponse.success(res, { token }); // successfully logged in
+                Http.Response.success(res, { token }); // successfully Logged in
                 return;
             }
-            httpResponse.forbidden(res); // 403
+            Http.Response.forbidden(res); // 403
         } catch (e) {
             next(e);
         } finally {
@@ -51,17 +51,24 @@ class UserController {
         }
     }
 
-    public async signup(req: Request, res: Response, next: NextFunction) {
+    /**
+     * @author Amir Saleem
+     * @param req
+     * @param res
+     * @param next
+     */
+
+    public async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
         const db: types.Database = new Database();
         try {
             const conn: types.Database = await db.getConn();
             const user: User = new User(conn);
             const newUser: any = await user.singup(req.body);
             if (newUser) {
-                httpResponse.success(res, newUser);
+                Http.Response.success(res, newUser);
                 return;
             }
-            httpResponse.badRequest(res, { msg: "username already exists" });
+            Http.Response.badRequest(res, { msg: "username already exists" });
         } catch (e) {
             next(e);
         } finally {

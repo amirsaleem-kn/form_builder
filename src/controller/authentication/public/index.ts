@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import log from "../../../lib/logger";
+import Log from "../../../lib/Logger";
 
 class PublicAuthentication {
     public authenticate(req: Request, res: Response, next: NextFunction): void {
         if (req.method === "OPTIONS") {
             return next();
         }
-        log.print("--- PUBLIC AUTHENTICATION ---");
+        Log.print("--- PUBLIC AUTHENTICATION ---");
         next();
     }
 }
