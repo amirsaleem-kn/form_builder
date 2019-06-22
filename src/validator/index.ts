@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { check } from "express-validator/check";
 import Log from "../lib/Logger";
 
 class Validator {

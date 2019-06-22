@@ -19,23 +19,24 @@ class ProtectedAuthentication {
         if (req.method === "OPTIONS") {
             return next();
         }
-        let token: string = req.get("Authorization"); // get token from Authorization header
-        const username: string = req.get("username");
-        const clientID: string = req.get("clientID");
-        if (!token) {
-            Http.Response.unauthorised(res);
-            return;
-        }
-        const db: types.Database = new Database();
-        try {
-            const conn: types.Database = await db.getConn();
-            token = token.slice(7, token.length); // strip the token string to remove Bearer from it
-            return next();
-        } catch (e) {
-            next(e);
-        } finally {
-            db.close();
-        }
+        return next();
+        // let token: string = req.get("Authorization"); // get token from Authorization header
+        // const username: string = req.get("username");
+        // const clientID: string = req.get("clientID");
+        // if (!token) {
+        //     Http.Response.unauthorised(res);
+        //     return;
+        // }
+        // const db: types.Database = new Database();
+        // try {
+        //     const conn: types.Database = await db.getConn();
+        //     token = token.slice(7, token.length); // strip the token string to remove Bearer from it
+        //     return next();
+        // } catch (e) {
+        //     next(e);
+        // } finally {
+        //     db.close();
+        // }
     }
 }
 

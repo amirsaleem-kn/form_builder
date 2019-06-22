@@ -11,7 +11,6 @@ class UserRoutes extends Routes {
     public subscribe(path: string, router: express.Router) {
         const userController = new UserController();
         const validator = new Validator();
-        this.router.post("/signup", validator.validate(userModel.signup), userController.signup);
         router.use(path, this.router);
     }
 }

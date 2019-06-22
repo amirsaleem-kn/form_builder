@@ -11,6 +11,7 @@ class UserRoutes extends Routes {
     public subscribe(path: string, router: express.Router) {
         const userController = new UserController();
         const validator = new Validator();
+        this.router.get("/search", validator.validate(userModel.search),  userController.find);
         router.use(path, this.router);
     }
 }

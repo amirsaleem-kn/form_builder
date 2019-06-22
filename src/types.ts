@@ -65,7 +65,6 @@ export interface Database {
     beginTransaction: () => Promise<null | undefined>;
     commitTransaction: () => Promise<null | undefined>;
     rollbackTransaction: () => Promise<null | undefined>;
-    insertInto: (tableName: string, values: any) => Promise<any>;
     isDatabase: (instance: any) => boolean;
 }
 
@@ -89,6 +88,25 @@ export interface User {
     username: string;
     salt: string;
     hash: string;
+}
+
+export interface UserEntity {
+    userId: number;
+    firstName: string;
+    lastName: string;
+    username: string;
+    hash: string;
+    salt: string;
+}
+
+export interface UserLevelEntity extends UserEntity {
+    levelId: number;
+    name: string;
+}
+
+export interface UserClientEntity extends UserEntity {
+    clientId: number;
+    clientSecret: string;
 }
 
 export interface JWTSignOptions {

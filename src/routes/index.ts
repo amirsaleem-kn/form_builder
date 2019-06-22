@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from "express";
 import expressValidator from "express-validator";
 import Http from "../lib/http/http";
 import Log from "../lib/Logger";
-import Subscriber from "./subscriber";
 
 class Routes {
 
@@ -28,6 +27,7 @@ class Routes {
     }
 
     protected errorMiddleware(err: Error, req: Request, res: Response, next: NextFunction) {
+        Log.print("INSIDE ERROR MIDDLEWARE");
         Log.print(err);
         switch (+res.locals.status) {
             case 422: Http.Response.badRequest(res, err); break;

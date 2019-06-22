@@ -28,9 +28,15 @@ export function prepareStmtFromObject(params: any) {
     const constraints: string[] = [];
     const data: any[] = [];
     Object.keys(params).forEach((item) => {
+        if (!params[item]) {
+            return;
+        }
         if (Array.isArray(params[item])) {
             constraints.push(`${item} in (?)`);
             data.push(params[item]);
+        } else if (typeof params[item] === "string" && params[item].indexOf(",") > -1) {
+            constraints.push(`${item} in (?)`);
+            data.push(params[item].split(","));
         } else if (params[item] instanceof RegExp) {
             constraints.push(`${item} REGEXP ?`);
             data.push(params[item]);
@@ -51,6 +57,14 @@ export function prepareStmtFromObject(params: any) {
                 } else if (value === "$like") {
                     if (Array.isArray(params[item][value])) {
                         const localConstraints: string[] = [];
+                        params[item][value].forEach((likeValues: any) => {
+                            localConstraints.push(`${item} LIKE ?`);
+                            data.push(`%${likeValues}%`);
+                        });
+                        constraints.push(`(${localConstraints.join(" OR ")})`);
+                    } else if (typeof params[item][value] === "string" && params[item][value].indexOf(",") > -1) {
+                        const localConstraints: string[] = [];
+                        params[item][value] = params[item][value].split(",");
                         params[item][value].forEach((likeValues: any) => {
                             localConstraints.push(`${item} LIKE ?`);
                             data.push(`%${likeValues}%`);

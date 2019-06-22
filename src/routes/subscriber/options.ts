@@ -12,7 +12,7 @@ class OptionsSubscriber extends Routes {
         app.use((req: Request, res: Response, next: NextFunction) => {
             res.header("Access-Control-Allow-Origin", "*"); // allow these origins to make requests
             res.header("Access-Control-Allow-Methods", "GET,POST,HEAD,OPTIONS,PUT,DELETE"); // allow these HTTP methods
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization, ClientID"); // allow these headers
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization, ClientSecret"); // allow these headers
             next();
         });
     }

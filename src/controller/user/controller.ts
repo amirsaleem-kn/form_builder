@@ -1,9 +1,13 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Amir Saleem. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 import { NextFunction, Request, Response } from "express";
-import User from "../../entity/user/user";
+import UserEntity from "../../entity/user/user";
 import Database from "../../lib/database/database";
 import Http from "../../lib/http/http";
 import * as types from "../../types";
-import * as util from "../../util/helper";
 import BaseController from "../base";
 
 /**
@@ -14,61 +18,18 @@ class UserController extends BaseController implements types.ControllerConstrain
 
     constructor() {
         super();
-        this.login = this.login.bind(this);
-        this.signup = this.signup.bind(this);
     }
 
-    /**
-     * @author Amir Saleem
-     * @param req
-     * @param res
-     * @param next
-     */
-
-    public async login(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const db: types.Database = new Database();
+    public async find(req: Request, res: Response, next: NextFunction) {
+        const db: Database = new Database();
         try {
-            const conn: types.Database = await db.getConn();
-            const user: User = new User(conn);
-            const clientSecret = req.get("clientSecret");
-            let credentials: any = req.get("Authorization");
-            if (!clientSecret || !credentials) {
-                Http.Response.forbidden(res); // 403
-                return;
-            }
-            credentials = util.base64_decode(credentials.slice(6, credentials.length));
-            credentials = credentials.split(":");
-            const token = await user.login(credentials[0], credentials[1], clientSecret);
-            if (token) {
-                Http.Response.success(res, { token }); // successfully Logged in
-                return;
-            }
-            Http.Response.forbidden(res); // 403
-        } catch (e) {
-            next(e);
-        } finally {
-            db.close();
-        }
-    }
-
-    /**
-     * @author Amir Saleem
-     * @param req
-     * @param res
-     * @param next
-     */
-
-    public async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const db: types.Database = new Database();
-        try {
-            const conn: types.Database = await db.getConn();
-            const user: User = new User(conn);
-            const newUser: any = await user.singup(req.body);
-            if (newUser) {
-                Http.Response.success(res, newUser);
-                return;
-            }
-            Http.Response.badRequest(res, { msg: "username already exists" });
+            const conn: Database = await db.getConn();
+            const user = new UserEntity(conn);
+            const { username, first_name, level_id } = req.query;
+            const searchParams = { username: { $like: username }, first_name, level_id };
+            const columns = { first_name: 1 , user_id: 1 };
+            const result = await user.includes(user.level, user.clients).find(searchParams, columns);
+            Http.Response.success(res, result);
         } catch (e) {
             next(e);
         } finally {

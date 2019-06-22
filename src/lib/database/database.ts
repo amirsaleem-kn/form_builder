@@ -106,19 +106,6 @@ class Database implements types.Database {
         return this === instance;
     }
 
-    public async insertInto(tableName: string, values: any[]|object) {
-        const [ columns, vars ] = util.getQueryVariables(values);
-        const escaped: string[] = columns.map(() => "?");
-        let query: string = `INSERT INTO ${tableName} (${columns})`;
-        if (Array.isArray(values)) {
-            query += ` VALUES ?`;
-        } else {
-            query += ` VALUES (${escaped.join(",")})`;
-        }
-        const result: any = await this.query(query, vars);
-        return result;
-    }
-
 }
 
 export default Database;
