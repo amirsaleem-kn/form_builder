@@ -1,5 +1,5 @@
 /**
- * @fileoverview schema declaration for user
+ * @fileoverview schema declaration for employee
  */
 
 /** -- package imports --  */
@@ -8,15 +8,17 @@ import uniqueValidator from "mongoose-unique-validator";
 
 /** -- local imports --  */
 
+import { Schema } from "mongoose";
 import database from "../../lib/database";
 import crypto from "../../util/crypto";
 
 /**
- * user schema
+ * employee schema
  */
 
 const schema = {
     active: Boolean,
+    department: { type: Schema.Types.ObjectId, ref: "Department" },
     firstName: {
         lowercase: true,
         required: [true, "can't be blank"],
@@ -41,32 +43,32 @@ const schema = {
     salt: String,
 };
 
-/** generate user schema  */
+/** generate employee schema  */
 
-const user = new database.mongoose.Schema(schema, { timestamps: true });
+const employee = new database.mongoose.Schema(schema, { timestamps: true });
 
 /** required plugin  */
 
-user.plugin(uniqueValidator, { message: "is already taken" });
+employee.plugin(uniqueValidator, { message: "is already taken" });
 
-/** virtual key for userSchema to get fullname  */
+/** virtual key for employeeSchema to get fullname  */
 
-user.virtual("fullName").get((): string => {
+employee.virtual("fullName").get((): string => {
     return `${this.firstName} ${this.middleName} ${this.lastName}`;
 });
 
 /** to set a password  */
 
-user.methods.setPassword = (password: string): void => {
+employee.methods.setPassword = (password: string): void => {
     this.salt = crypto.randomBytes();
     this.hash = crypto.md5(password, this.salt);
 };
 
 /** to validate a password  */
 
-user.methods.validatePassword = (password: string): boolean => {
+employee.methods.validatePassword = (password: string): boolean => {
     const hash = crypto.md5(password, this.salt);
     return hash === this.hash;
 };
 
-export default user;
+export default employee;
