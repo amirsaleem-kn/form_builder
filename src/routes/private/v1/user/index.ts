@@ -1,6 +1,5 @@
 import express from "express";
-import UserController from "../../../../controller/user/controller";
-import * as userModel from "../../../../model/user";
+import UserController from "../../../../controller/user";
 import Routes from "../../../../routes";
 import Validator from "../../../../validator";
 

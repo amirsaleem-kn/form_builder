@@ -3,6 +3,7 @@
  */
 
 /** -- package imports  */
+import bluebird from "bluebird";
 import mongoose from "mongoose";
 
 /** -- local imports  */
@@ -13,7 +14,7 @@ import * as types from "./types";
  * @description Database class to interact with MongoDb
  */
 
-class Database {
+class Database implements types.Database {
     /** @public mongoose instance  */
     public mongoose = mongoose;
 
@@ -26,13 +27,13 @@ class Database {
     constructor(mongoDbUrl: types.MongoDbUrl, options?: types.MongoConnectOptions) {
         this._mongoDbUrl = mongoDbUrl;
         this._options = options;
+        this.mongoose.Promise = bluebird;
     }
 
     /**
      * @public
      * @description to establish a connection with mongoDb database server
      * @return void
-     *
      */
 
     public async connect(): Promise<void> {

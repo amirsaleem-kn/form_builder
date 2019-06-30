@@ -1,15 +1,6 @@
-import mongoose from "mongoose";
+import database from "../../lib/database";
+import { userSchema } from "../../schema";
 
-const userSchema: any = new mongoose.Schema({
-    firstName: { type: String },
-    lastName: { type: String },
-    middleName: { type: String }
-});
+const User = database.mongoose.model("user", userSchema);
 
-userSchema.virtual("fullName").get(() => {
-    return this.firstName + " " + this.lastName;
-});
-
-const user = mongoose.model("user", userSchema);
-
-export default userSchema;
+export default User;
