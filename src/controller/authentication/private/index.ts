@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import config from "../../../configuration";
-import { Database } from "../../../lib/database";
-import Http from "../../../lib/http/http";
 import jwt from "../../../lib/jwt";
 import Log from "../../../lib/Logger";
 import * as types from "../../../types";

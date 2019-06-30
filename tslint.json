@@ -1,6 +1,9 @@
 {
     "defaultSeverity": "error",
-    "interface-name" : [true, "never-prefix"],
+    "interface-name": [
+        true,
+        "never-prefix"
+    ],
     "extends": [
         "tslint:recommended"
     ],
@@ -13,6 +16,12 @@
         "max-line-length": [
             true,
             180
+        ],
+        "variable-name": [
+            true,
+            "ban-keywords",
+            "check-format",
+            "allow-leading-underscore"
         ]
     },
     "rulesDirectory": []

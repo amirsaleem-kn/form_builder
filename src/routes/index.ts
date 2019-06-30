@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import expressValidator from "express-validator";
-import Http from "../lib/http/http";
-import Log from "../lib/Logger";
+import HttpResponse from "../lib/http/response";
 
 class Routes {
 
@@ -27,12 +26,9 @@ class Routes {
     }
 
     protected errorMiddleware(err: Error, req: Request, res: Response, next: NextFunction) {
-        Log.print("INSIDE ERROR MIDDLEWARE");
-        Log.print(err);
-        switch (+res.locals.status) {
-            case 422: Http.Response.badRequest(res, err); break;
-            default: Http.Response.serviceError(res);
-        }
+        const response = new HttpResponse(res);
+        response.status = +res.locals.status || 503;
+        response.error([{ msg: err.toString() }]);
     }
 
 }

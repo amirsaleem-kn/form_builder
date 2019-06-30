@@ -6,7 +6,7 @@ class PublicAuthentication {
         if (req.method === "OPTIONS") {
             return next();
         }
-        Log.print("--- PUBLIC AUTHENTICATION ---");
+        Log.print("--- PUBLIC ROUTE ---");
         next();
     }
 }

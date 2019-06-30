@@ -1,9 +1,8 @@
 import express from "express";
+import adminSubscriber from "./admin";
 import Subscriber from "./index";
-import openSubscriber from "./open";
 import optionsSubscriber from "./options";
 import privateSubscriber from "./private";
-import protectedSubscriber from "./protected";
 import publicSubscriber from "./public";
 
 /**
@@ -17,8 +16,7 @@ class MainSubscriber extends Subscriber {
         optionsSubscriber.subscribe(app);
         publicSubscriber.subscribe(app);
         privateSubscriber.subscribe(app);
-        openSubscriber.subscribe(app);
-        protectedSubscriber.subscribe(app);
+        adminSubscriber.subscribe(app);
     }
 }
 

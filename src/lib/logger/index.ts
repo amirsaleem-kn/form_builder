@@ -1,7 +1,7 @@
 /**
  * @fileoverview implementation of logger
  * @public
- * @package environment from ./util/env file 
+ * @package environment from ./util/env file
  */
 
 /**

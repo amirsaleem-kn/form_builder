@@ -5,7 +5,7 @@
         "target": "es6",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
@@ -15,6 +15,6 @@
         },
     },
     "include": [
-        "src/**/*"
+        "src/**/*", "src/lib/jwt/.d.ts"
     ]
 }
