@@ -64,6 +64,7 @@ class App {
             this.app.use(bodyParser.json(config.bodyParser.json));
             this.app.use(bodyParser.urlencoded(config.bodyParser.urlencoded));
             database.connect().catch((err: Error) => Log.error(err));
+            require("./model"); // initialise mongo db models
             subscriber.subscribe(this.app); // subscribe to application routes
         } catch (e) {
             Log.error(e);
